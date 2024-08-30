@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Penghitungan Waktu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+      background-color: black; /* Warna latar belakang hitam */
+      color: white; /* Warna teks putih */
+    }
+
+    /* Gaya untuk angka */
+    #elapsedTime, #elapsedDays {
+      font-size: 24px;
+      font-weight: bold;
+      border: 2px solid white; /* Tambahkan border putih setiap angka */
+      padding: 5px; /* Berikan ruang di sekitar setiap angka */
+      display: inline-block; /* Membuat kotak di sekitar setiap angka */
+    }
+  </style>
+</head>
+<body>
+
+  <h1>أمسكوا</h1>
+  <p id="elapsedTime"></p>
+  <p id="elapsedDays"></p>
+
+  <script>
+    // Fungsi untuk mengatur waktu mulai pada jam 12:00 hari Selasa, 13 Februari
+    function setStartTime() {
+      var startTime = new Date('2024-02-13T12:00:00').getTime();
+
+      // Set waktu mulai di penyimpanan lokal
+      localStorage.setItem('startTime', startTime.toString());
+    }
+
+    // Fungsi untuk mendapatkan waktu mulai dari penyimpanan lokal
+    function getStartTime() {
+      var storedStartTime = localStorage.getItem('startTime');
+
+      if (storedStartTime) {
+        return parseInt(storedStartTime, 10);
+      } else {
+        setStartTime(); // Jika tidak ada waktu mulai yang disimpan, atur satu.
+        return getStartTime();
+      }
+    }
+
+    // Perbarui waktu setiap detik
+    var timerInterval = setInterval(function() {
+      // Waktu saat ini
+      var currentTime = new Date().getTime();
+
+      // Hitung selisih waktu antara sekarang dan waktu mulai
+      var elapsedTime = currentTime - getStartTime();
+
+      // Hitung jam, menit, dan detik
+      var hours = Math.floor(elapsedTime / (1000 * 60 * 60));
+      var minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
+
+      // Hitung jumlah hari
+      var elapsedDays = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
+
+      // Tampilkan hasil di elemen dengan id "elapsedTime"
+      document.getElementById('elapsedTime').innerHTML = 'Waktu: ' + hours + ' jam ' + minutes + ' menit ' + seconds + ' detik ';
+      
+      // Tampilkan jumlah hari di elemen dengan id "elapsedDays"
+      document.getElementById('elapsedDays').innerHTML = 'Jumlah hari: ' + elapsedDays + ' hari';
+    }, 1000);
+  </script>
+
+</body>
+</html>
